@@ -41,13 +41,42 @@ const courseSchema = new Schema({
             lecture:{
                 public_id:{
                     type:String,
-                    required:true,
+                    default: '',
                 },
                 secure_url:{
                     type:String,
-                    required:true,
+                    default: '',
                 }
-            }
+            },
+            materials:[
+                {
+                    type:{
+                        type:String,
+                        enum:['text','link','file'],
+                        required:true,
+                    },
+                    title:{ type:String, required:true },
+                    content: String,
+                    url: String,
+                    file:{
+                        public_id: String,
+                        secure_url: String,
+                        originalName: String,
+                    },
+                }
+            ],
+            quiz:{
+                title: String,
+                passingScore:{ type:Number, default:70 },
+                questions:[
+                    {
+                        text:{ type:String },
+                        options:[{ type:String }],
+                        correctIndex:{ type:Number },
+                        explanation: String,
+                    }
+                ],
+            },
         }
     ],
     numberOfLectures:{
@@ -57,7 +86,15 @@ const courseSchema = new Schema({
     createdBy:{
         type:String,
         required:true,
-    }
+    },
+    isPublic:{
+        type: Boolean,
+        default: false,
+    },
+    assignedTo:[{
+        type: Schema.Types.ObjectId,
+        ref: 'User',
+    }]
 
 },{
     timestamps:true

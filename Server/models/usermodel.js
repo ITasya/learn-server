@@ -51,7 +51,13 @@ const userSchema= new Schema({
         default:'USER'
     },
     forgotPasswordToken:String ,
-    forgotPasswordExpiry: Date
+    forgotPasswordExpiry: Date,
+    notifications:[{
+        message:{ type:String, required:true },
+        courseId:{ type:Schema.Types.ObjectId, ref:'Course' },
+        read:{ type:Boolean, default:false },
+        createdAt:{ type:Date, default:Date.now },
+    }]
 },{
     timestamps:true
 });

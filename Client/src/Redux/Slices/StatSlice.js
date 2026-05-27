@@ -12,11 +12,9 @@ export const getStatsData=createAsyncThunk("stats/get", async()=>{
     try {
         const response= axiosInstance.get("/admin/stats/users");
         toast.promise(response,{
-            loading:"Getting the stats........",
-            success:(data)=>{
-                return data?.data?.message
-            }, 
-            error:"Failed to load stats"
+            loading:"Загрузка статистики...",
+            success:(data)=>{ return data?.data?.message; },
+            error:"Не удалось загрузить статистику"
         })
         return (await response).data;
     } catch (error) {

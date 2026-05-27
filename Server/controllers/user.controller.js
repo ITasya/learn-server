@@ -1,4 +1,4 @@
-import cloudinary from "cloudinary"
+import { v2 as cloudinary } from "cloudinary";
 import crypto from 'crypto';
 import fs from 'fs/promises'
 
@@ -44,10 +44,10 @@ export const register=asyncHandler(async(req,res,next)=>{
         );
     }
 
-    if(req.file){
+        if(req.file){
     
         try {
-            const result =await cloudinary.v2.uploader.upload(req.file.path,{
+            const result =await cloudinary.uploader.upload(req.file.path,{
                 folder:'lms',
                 width:250,
                 height:250,
@@ -291,10 +291,10 @@ export const updateUser=asyncHandler(async(req, res,next)=>{
 
     if(req.file){
 
-        await cloudinary.v2.uploader.destroy(user.avatar.public_id);
+        await cloudinary.uploader.destroy(user.avatar.public_id);
 
         try{
-            const result =await cloudinary.v2.uploader.upload(req.file.path,{
+            const result =await cloudinary.uploader.upload(req.file.path,{
                 folder:'lms',
                 width:250,
                 height:250,

@@ -7,104 +7,105 @@ import HomeLayout from "../Layouts/HomeLayout";
 
 function Contact(){
 
-    const [userInput , setUserInput]= useState({
-        name:"",
-        email:"",
-        message:"",
+    const [userInput, setUserInput] = useState({
+        name: "",
+        email: "",
+        message: "",
     })
 
     function handleInputChange(e){
-            const {name , value}= e.target;
-            // console.log(name, value);
-            setUserInput({
-                ...userInput , 
-                [name]:value
-            })
-
+        const {name, value} = e.target;
+        setUserInput({
+            ...userInput,
+            [name]: value
+        })
     }
 
-     async function onFormSubmit(e){
+    async function onFormSubmit(e){
         e.preventDefault();
         if(!userInput.email || !userInput.name || !userInput.message){
-                toast.error("All fields are mandatory");
-                return;
+            toast.error("Все поля обязательны для заполнения");
+            return;
         }
         if(!isEmail(userInput.email)){
-            toast.error("Invalid Email ")
+            toast.error("Некорректный адрес электронной почты");
             return;
         }
         try {
-            const response = axiosInstance.post("/contact",userInput)
-            toast.promise(response,{
-                loading:"Submitting your message....",
-                success:"Form submitted sucessfully",
-                error:"Failed to submit the from"
+            const response = axiosInstance.post("/contact", userInput)
+            toast.promise(response, {
+                loading: "Отправляем ваше сообщение...",
+                success: "Сообщение успешно отправлено",
+                error: "Не удалось отправить сообщение"
             })
             const contactResponse = await response;
             if(contactResponse?.data?.success){
-                setUserInput({
-                    name:"",
-                    email:"",
-                    message:""
-                })
+                setUserInput({ name: "", email: "", message: "" })
             }
         } catch (error) {
-            toast.error("operation failed......")
+            toast.error("Операция не выполнена...")
         }
     }
 
     return (
-     <HomeLayout>
-        <div className=" flex items-center justify-center h-[90vh] md:h-[100vh]">
-            <form
-                noValidate
-                onSubmit={onFormSubmit}
-                className=" flex  flex-col items-center justify-center  gap-2  p-5 rounded-md text-white shadow-[0_0_10px_black] sm:w-[22rem] w-[80vw]">
-                <h1 className=" text-3xl font-semibold">
-                        Contact Form
-                </h1>
+        <HomeLayout>
+            <div className="flex items-center justify-center min-h-[90vh] bg-gradient-to-br from-white to-primary-50">
+                <form
+                    noValidate
+                    onSubmit={onFormSubmit}
+                    className="flex flex-col items-center justify-center gap-4 p-8 rounded-2xl bg-white shadow-lg border border-primary-100 sm:w-[26rem] w-[90vw]"
+                >
+                    <h1 className="text-3xl font-bold text-gray-900">
+                        Обратная связь
+                    </h1>
+                    <p className="text-gray-500 text-sm text-center">Напишите нам — мы ответим в ближайшее время</p>
 
-                <div className=" flex flex-col w-full gap-1">
-                    <label htmlFor="name" className=" text-xl font-semibold">Name</label>
-                    <input 
-                        className=" bg-transparent  border  px-2 py-1 rounded-sm" 
-                        type="text" 
-                        name="name"
-                        id="name"
-                        placeholder="Enter your name..."
-                        onChange={handleInputChange}
-                        value={userInput.name}
-                    />
-                </div>
+                    <div className="flex flex-col w-full gap-1">
+                        <label htmlFor="name" className="text-sm font-semibold text-gray-700">Имя</label>
+                        <input
+                            className="border border-gray-300 focus:border-primary-500 focus:outline-none px-3 py-2 rounded-lg text-gray-900 bg-white transition-colors"
+                            type="text"
+                            name="name"
+                            id="name"
+                            placeholder="Введите ваше имя"
+                            onChange={handleInputChange}
+                            value={userInput.name}
+                        />
+                    </div>
 
-                <div className=" flex flex-col w-full gap-1">
-                    <label htmlFor="email" className=" text-xl font-semibold">Email</label>
-                    <input 
-                        className=" bg-transparent  border  px-2 py-1 rounded-sm" 
-                        type="email" 
-                        name="email"
-                        id="email"
-                        placeholder="Enter your email..."
-                        onChange={handleInputChange}
-                        value={userInput.email}
-                    />
-                </div>
+                    <div className="flex flex-col w-full gap-1">
+                        <label htmlFor="email" className="text-sm font-semibold text-gray-700">Email</label>
+                        <input
+                            className="border border-gray-300 focus:border-primary-500 focus:outline-none px-3 py-2 rounded-lg text-gray-900 bg-white transition-colors"
+                            type="email"
+                            name="email"
+                            id="email"
+                            placeholder="Введите ваш email"
+                            onChange={handleInputChange}
+                            value={userInput.email}
+                        />
+                    </div>
 
-                <div className=" flex flex-col w-full gap-1">
-                    <label htmlFor="message" className=" text-xl font-semibold">Message</label>
-                    <textarea 
-                        className=" bg-transparent  border  px-2 py-1 rounded-sm resize-none h-40"
-                        name="message"
-                        id="message"
-                        placeholder="Enter your message..."
-                        onChange={handleInputChange}
-                        value={userInput.message}
-                    />
-                </div>
-                <button type="submit" className=" w-full bg-yellow-600 hover:bg-yellow-500 transition-all ease-in-out duration-300 rounded-sm py-2 font-semibold text-lg cursor-pointer">Submit</button>
-            </form>
-        </div>
-     </HomeLayout>
+                    <div className="flex flex-col w-full gap-1">
+                        <label htmlFor="message" className="text-sm font-semibold text-gray-700">Сообщение</label>
+                        <textarea
+                            className="border border-gray-300 focus:border-primary-500 focus:outline-none px-3 py-2 rounded-lg resize-none h-36 text-gray-900 bg-white transition-colors"
+                            name="message"
+                            id="message"
+                            placeholder="Введите ваше сообщение"
+                            onChange={handleInputChange}
+                            value={userInput.message}
+                        />
+                    </div>
+                    <button
+                        type="submit"
+                        className="w-full bg-primary-600 hover:bg-primary-700 text-white transition-all ease-in-out duration-300 rounded-lg py-2.5 font-semibold text-lg cursor-pointer shadow-md"
+                    >
+                        Отправить
+                    </button>
+                </form>
+            </div>
+        </HomeLayout>
     )
 }
-export  default Contact;
+export default Contact;

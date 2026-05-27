@@ -22,27 +22,21 @@ function Checkout() {
     async function handleSubscription(e) {
         e.preventDefault();
         if(!razorpayKey || !subscription_id) {
-            toast.error("Something went wrong");
+            toast.error("Что-то пошло не так");
             return;
         }
         const options = {
             key: razorpayKey,
             subscription_id: subscription_id,
-            name: "Coursify Pvt. Ltd.",
-            description: "Subscription",
-            theme: {
-                color: '#F37258'
-            },
-            
+            name: "LearnHub",
+            description: "Подписка",
+            theme: { color: '#7c3aed' },
             handler: async function (response) {
                 paymentDetails.razorpay_payment_id = response.razorpay_payment_id;
                 paymentDetails.razorpay_signature = response.razorpay_signature;
                 paymentDetails.razorpay_subscription_id = response.razorpay_subscription_id;
-
-                toast.success("Payment successfull");
-
+                toast.success("Оплата прошла успешно");
                 const res = await dispatch(verifyUserPayment(paymentDetails));
-                // console.log(res);
                 res?.payload?.success ? navigate("/checkout/success") : navigate("/checkout/fail");
             }
         }
@@ -63,38 +57,41 @@ function Checkout() {
         <HomeLayout>
             <form
                 onSubmit={handleSubscription}
-                className="min-h-[90vh] flex items-center justify-center text-white"
+                className="min-h-[90vh] flex items-center justify-center bg-gradient-to-br from-white to-primary-50"
             >
-                <div className="w-80 h-[26rem] flex flex-col justify-center shadow-[0_0_10px_black] rounded-lg relative">
-                    <h1 className="bg-yellow-500 absolute top-0 w-full text-center py-4 text-2xl font-bold rounded-tl0lg rounded-tr-lg">Subscription Bundle</h1>
-                    <div className="px-4 space-y-5 text-center">
-                        <p className="text-[17px]">
-                            This purchase will allow you to access all available course
-                            of our platform for {" "} 
-                            <span className="text-yellow-500 font-bold">
-                                <br />
-                                1 Year duration
-                            </span> { " " }
-                            All the existing and new launched courses will be also available
-                        </p>
-
-                        <p className="flex items-center justify-center gap-1 text-2xl font-bold text-yellow-500">
-                            <BiRupee /><span>499</span> only
-                        </p>
-                        <div className="text-gray-200">
-                            <p>100% refund on cancellation</p>
-                            <p>* Terms and conditions applied *</p>
-                        </div>
-                        <button type="submit" className="bg-yellow-500 hover:bg-yellow-600 transition-all ease-in-out duration-300 absolute bottom-0 w-full left-0 text-xl font-bold rounded-bl-lg rounded-br-lg py-2">
-                            Buy now
-                        </button>
+                <div className="w-80 flex flex-col bg-white rounded-2xl shadow-lg border border-primary-100 overflow-hidden">
+                    <div className="bg-primary-600 py-4 text-center">
+                        <h1 className="text-2xl font-bold text-white">Подписка</h1>
                     </div>
-                </div>
 
+                    <div className="px-6 py-6 space-y-5 text-center">
+                        <p className="text-gray-600 text-sm leading-relaxed">
+                            Эта подписка откроет вам доступ ко всем курсам платформы на{" "}
+                            <span className="text-primary-600 font-bold">1 год</span>.
+                            Все существующие и новые курсы будут доступны сразу.
+                        </p>
+
+                        <p className="flex items-center justify-center gap-1 text-3xl font-bold text-primary-700">
+                            <BiRupee /><span>499</span>
+                            <span className="text-base font-normal text-gray-500 ml-1">₽/год</span>
+                        </p>
+
+                        <div className="text-gray-400 text-xs space-y-1 bg-primary-50 rounded-xl p-3">
+                            <p>100% возврат при отмене</p>
+                            <p>* Применяются условия *</p>
+                        </div>
+                    </div>
+
+                    <button
+                        type="submit"
+                        className="bg-primary-600 hover:bg-primary-700 text-white text-lg font-bold py-3 transition-all ease-in-out duration-300"
+                    >
+                        Оплатить
+                    </button>
+                </div>
             </form>
         </HomeLayout>
     );
-    
 }
 
 export default Checkout;

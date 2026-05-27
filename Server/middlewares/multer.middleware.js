@@ -1,35 +1,56 @@
 import multer from "multer";
 import path from "path";
 
-/**
- * @upload - Middleware to handle file uploads using multer.
- * The configuration sets the file size limit, file storage location, and file filter for allowed file types.
- */
-const upload = multer({
-  dest: "uploads/",
-  limits: { fileSize: 50 * 1024 * 1024 }, // 50 mb in size max limit
-  storage: multer.diskStorage({
-    destination: "uploads/",
-    filename: (_req, file, cb) => {
-      cb(null, file.originalname);
-    },
-  }),
-  fileFilter: (_req, file, cb) => {
-    let ext = path.extname(file.originalname);
-
-    if (
-      ext !== ".jpg" &&
-      ext !== ".jpeg" &&
-      ext !== ".webp" &&
-      ext !== ".png" &&
-      ext !== ".mp4"
-    ) {
-      cb(new Error(`Unsupported file type! ${ext}`), false);
-      return;
-    }
-
-    cb(null, true);
+const storage = multer.diskStorage({
+  destination: "uploads/",
+  filename: (_req, file, cb) => {
+    // Preserve original name but make it unique
+    const unique = Date.now() + '-' + Math.round(Math.random() * 1e6);
+    cb(null, unique + path.extname(file.originalname));
   },
 });
 
+const imageFilter = (_req, file, cb) => {
+  const ext = path.extname(file.originalname).toLowerCase();
+  const allowed = ['.jpg', '.jpeg', '.webp', '.png', '.svg'];
+  if (!allowed.includes(ext)) {
+    return cb(new Error(`Unsupported image type: ${ext}`), false);
+  }
+  cb(null, true);
+};
+
+const lectureFilter = (_req, file, cb) => {
+  const ext = path.extname(file.originalname).toLowerCase();
+  const allowedVideo = ['.mp4', '.webm', '.mov', '.avi', '.mkv'];
+  const allowedMaterial = ['.pdf', '.doc', '.docx', '.txt', '.jpg', '.jpeg', '.png', '.webp'];
+
+  if ([...allowedVideo, ...allowedMaterial].includes(ext)) {
+    return cb(null, true);
+  }
+  cb(new Error(`Unsupported file type: ${ext}`), false);
+};
+
+/**
+ * For avatar/thumbnail uploads (images only)
+ */
+const upload = multer({
+  storage,
+  limits: { fileSize: 10 * 1024 * 1024 }, // 10 MB
+  fileFilter: imageFilter,
+});
+
+/**
+ * For lecture uploads: video + optional material files.
+ * Fields: lecture (1 video), materialFiles (up to 10 files).
+ */
+const uploadLecture = multer({
+  storage,
+  limits: { fileSize: 100 * 1024 * 1024 }, // 100 MB
+  fileFilter: lectureFilter,
+}).fields([
+  { name: 'lecture', maxCount: 1 },
+  { name: 'materialFiles', maxCount: 10 },
+]);
+
+export { uploadLecture };
 export default upload;

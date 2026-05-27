@@ -142,3 +142,6 @@ We welcome contributions to Learning Management System  Feel free to create pull
 ## Further-Support
 
 If you encounter any issues or have questions, feel free to raise them as GitHub issues, and we'll be happy to assist you.
+
+
+mongodb+srv://admin:admin123@cluster0.ynp5t1n.mongodb.net/?appName=Cluster0

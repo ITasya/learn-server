@@ -11,9 +11,9 @@ export const getAllCourse = createAsyncThunk("/course/get", async ()=>{
     try {
         const response=axiosInstance.get("/course");
         toast.promise(response, {
-            loading:"loading course data ...",
-            success:"courses loaded sucessfully",
-            error:"Failed to get the courses",
+            loading: "Загрузка курсов...",
+            success: "Курсы загружены",
+            error: "Не удалось загрузить курсы",
         });
         return (await response).data.courses;
     } catch (error) {
@@ -31,10 +31,10 @@ export const createNewCourse= createAsyncThunk("/course/create", async(data)=>{
         fromData.append("thumbnail",data?.thumbnail);
 
         const response=axiosInstance.post("/course", fromData);
-        toast.promise(response,{
-            loading:"Creating new course",
-            success:"Course created sucessfully",
-            error:"Failed to create course"
+        toast.promise(response, {
+            loading: "Создание курса...",
+            success: "Курс успешно создан",
+            error: "Не удалось создать курс",
         });
 
         return (await response).data;
@@ -44,13 +44,54 @@ export const createNewCourse= createAsyncThunk("/course/create", async(data)=>{
     }
 })
 
+export const assignCourse = createAsyncThunk("/course/assign", async ({ courseId, userIds, action }) => {
+    try {
+        const response = axiosInstance.post(`/course/${courseId}/assign`, { userIds, action });
+        toast.promise(response, {
+            loading: "Обновление назначений...",
+            success: action === 'add' ? "Курс назначен сотрудникам" : "Назначение отменено",
+            error: "Ошибка назначения",
+        });
+        return (await response).data;
+    } catch (error) {
+        toast.error(error?.response?.data?.message);
+    }
+});
+
+export const setCoursePublic = createAsyncThunk("/course/setPublic", async ({ courseId, isPublic }) => {
+    try {
+        const response = await axiosInstance.patch(`/course/${courseId}/public`, { isPublic });
+        return response.data;
+    } catch (error) {
+        toast.error(error?.response?.data?.message);
+    }
+});
+
+export const getEmployeesProgress = createAsyncThunk("/admin/employees", async () => {
+    try {
+        const response = await axiosInstance.get("/course/admin/employees");
+        return response.data;
+    } catch (error) {
+        toast.error(error?.response?.data?.message ?? "Не удалось загрузить данные");
+    }
+});
+
+export const getAllUsers = createAsyncThunk("/admin/users", async () => {
+    try {
+        const response = await axiosInstance.get("/course/admin/users");
+        return response.data;
+    } catch (error) {
+        toast.error(error?.response?.data?.message);
+    }
+});
+
 export const deleteCourse = createAsyncThunk("/course/delete", async (id)=>{
     try {
         const response=axiosInstance.delete(`/course/${id}`);
         toast.promise(response, {
-            loading:"deleting course data ...",
-            success:"course deleted sucessfully",
-            error:"Failed to delete the course",
+            loading: "Удаление курса...",
+            success: "Курс удалён",
+            error: "Не удалось удалить курс",
         });
         return (await response).data;
     } catch (error) {
@@ -79,9 +120,9 @@ export const updateCourse = createAsyncThunk("/course/update", async (data) => {
       });
   
       toast.promise(res, {
-        loading: "Updating the course...",
-        success: "Course updated successfully",
-        error: "Failed to update course",
+        loading: "Обновление курса...",
+        success: "Курс обновлён",
+        error: "Не удалось обновить курс",
       });
   
       const response = await res;
@@ -92,18 +133,38 @@ export const updateCourse = createAsyncThunk("/course/update", async (data) => {
     }
   });
 
-const courseSlice =createSlice({
-    name :"course",
-    initialState,
-    reducers:{},
-    extraReducers:(builder)=>{
-        builder.addCase(getAllCourse.fulfilled,(state, action)=>{
-            if(action.payload){
-                state.courseData=[...action.payload]
-                
-            }
-        })
-    } 
+const courseSlice = createSlice({
+    name: "course",
+    initialState: {
+        courseData: [],
+        employees: [],
+        allUsers: [],
+    },
+    reducers: {},
+    extraReducers: (builder) => {
+        builder
+            .addCase(getAllCourse.fulfilled, (state, action) => {
+                if (action.payload) state.courseData = [...action.payload];
+            })
+            .addCase(getEmployeesProgress.fulfilled, (state, action) => {
+                if (action?.payload?.employees) state.employees = action.payload.employees;
+            })
+            .addCase(getAllUsers.fulfilled, (state, action) => {
+                if (action?.payload?.users) state.allUsers = action.payload.users;
+            })
+            .addCase(assignCourse.fulfilled, (state, action) => {
+                if (action?.payload?.course) {
+                    const idx = state.courseData.findIndex(c => c._id === action.payload.course._id);
+                    if (idx !== -1) state.courseData[idx] = { ...state.courseData[idx], ...action.payload.course };
+                }
+            })
+            .addCase(setCoursePublic.fulfilled, (state, action) => {
+                if (action?.payload?.course) {
+                    const idx = state.courseData.findIndex(c => c._id === action.payload.course._id);
+                    if (idx !== -1) state.courseData[idx] = { ...state.courseData[idx], ...action.payload.course };
+                }
+            });
+    },
 });
 
 export default courseSlice.reducer;

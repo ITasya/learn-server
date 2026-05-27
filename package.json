@@ -1,0 +1,24 @@
+{
+  "name": "larning-management-system",
+  "version": "1.0.0",
+  "description": "This repository contains the source code and implementation of a Learning Management System (LMS) developed using the MERN stack (MongoDB, Express.js, React, Node.js) along with Tailwind CSS and DaisyUI for styling, Cloudinary for managing media, and Razorpay for subscription management.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/princegupta101/Larning-Management-System.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/princegupta101/Larning-Management-System/issues"
+  },
+  "homepage": "https://github.com/princegupta101/Larning-Management-System#readme",
+  "dependencies": {
+    "cloudinary": "^2.9.0",
+    "mongodb": "^7.1.0"
+  }
+}

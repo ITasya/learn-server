@@ -7,96 +7,84 @@ import { Link, useNavigate } from "react-router-dom";
 import HomeLayout from "../../Layouts/HomeLayout";
 import { createNewCourse } from "../../Redux/Slices/CourseSlice";
 
-  function CreateCourse(){
+function CreateCourse(){
 
-    const dispatch =useDispatch();
-    const navigate =useNavigate();
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
 
-    const [userInput, setUserInput]=useState({
-        title:"",
-        category:"",
-        description:"",
-        thumbnail:null,
-        previewImage:""
-
+    const [userInput, setUserInput] = useState({
+        title: "",
+        category: "",
+        description: "",
+        createdBy: "",
+        thumbnail: null,
+        previewImage: "",
     });
 
-     function handleImageUpload(e){
+    function handleImageUpload(e){
         e.preventDefault();
-        const uploadedImage=e.target.files[0];
+        const uploadedImage = e.target.files[0];
         if(uploadedImage){
             const fileReader = new FileReader();
             fileReader.readAsDataURL(uploadedImage);
             fileReader.addEventListener("load", function(){
-                setUserInput({
-                    ...userInput,
-                    previewImage:this.result,
-                    thumbnail:uploadedImage
-                })
+                setUserInput({ ...userInput, previewImage: this.result, thumbnail: uploadedImage })
             })
         }
     }
-    
+
     function handleUserInput(e){
         e.preventDefault();
-        const {name,value}=e.target;
-       setUserInput({
-            ...userInput,
-            [name]:value
-       })
+        const {name, value} = e.target;
+        setUserInput({ ...userInput, [name]: value })
     }
 
     async function OnFormSubmit(e){
         e.preventDefault();
-        if(!userInput.title ||!userInput.description||!userInput.category||!userInput.thumbnail|!userInput.previewImage){
-            toast.error("All fields are mandatory");
+        if(!userInput.title || !userInput.description || !userInput.category || !userInput.thumbnail || !userInput.previewImage){
+            toast.error("Все поля обязательны для заполнения");
             return;
         }
-
         const response = await dispatch(createNewCourse(userInput));
         if(response?.payload?.success){
-            setUserInput({
-                title:"",
-                category:"",
-                description:"",
-                thumbnail:null,
-                previewImage:""
-            });
+            setUserInput({ title: "", category: "", description: "", thumbnail: null, previewImage: "" });
             navigate("/courses");
         }
     }
+
     return(
         <HomeLayout>
-             <div className="flex items-center justify-center h-[100vh]">
-                <form 
+            <div className="flex items-center justify-center min-h-[100vh] bg-gradient-to-br from-white to-primary-50 py-10">
+                <form
                     onSubmit={OnFormSubmit}
-                    className="flex flex-col justify-center gap-2 md:gap-5 rounded-lg p-4 mt-5 relative text-white w-[80vw] md:w-[700px] sm:my-10   shadow-[0_0_10px_black]  "
+                    className="flex flex-col justify-center gap-5 rounded-2xl p-8 bg-white text-gray-900 w-[90vw] md:w-[700px] shadow-lg border border-primary-100 relative"
                 >
-            
-                      <div>
-                        <Link to={"/courses"} className="  absolute left-2 text-xl text-accent cursor-pointer">
-                            <AiOutlineArrowLeft/>
+                    <div>
+                        <Link to={"/courses"} className="absolute left-4 top-4 text-xl text-primary-600 hover:text-primary-700 cursor-pointer">
+                            <AiOutlineArrowLeft />
                         </Link>
                     </div>
-            
-                    <h1 className=" text-center text-2xl font-bold">
-                        Create New Course
+
+                    <h1 className="text-center text-2xl font-bold text-gray-900">
+                        Создать новый курс
                     </h1>
 
-                    <main className=" grid lg:grid-cols-2 grid-cols-1 gap-x-10">
-                        <div>
+                    <main className="grid lg:grid-cols-2 grid-cols-1 gap-x-8 gap-y-4">
+                        <div className="flex flex-col gap-4">
                             <div>
-                                <label htmlFor="image_uploads" className="  cursor-pointer">
-                                        {userInput.previewImage ? (
-                                            <img 
-                                                className=" w-full h-44 m-auto border"
-                                                src={userInput.previewImage}
-                                            />
-                                        ):(
-                                            <div className=" w-full h-44 m-auto flex items-center justify-center border">
-                                                <h1 className=" font-bold text-lg">  Upload your course thumbnail</h1>
-                                            </div>
-                                        ) }
+                                <label htmlFor="image_uploads" className="cursor-pointer block">
+                                    {userInput.previewImage ? (
+                                        <img
+                                            className="w-full h-44 object-cover rounded-xl border-2 border-primary-200"
+                                            src={userInput.previewImage}
+                                            alt="обложка курса"
+                                        />
+                                    ) : (
+                                        <div className="w-full h-44 rounded-xl border-2 border-dashed border-primary-300 bg-primary-50 flex flex-col items-center justify-center gap-2 hover:bg-primary-100 transition-colors">
+                                            <p className="font-semibold text-primary-600">Загрузить обложку</p>
+                                            <p className="text-xs text-gray-400">JPG, JPEG, PNG</p>
+                                        </div>
+                                    )}
                                 </label>
                                 <input
                                     className="hidden"
@@ -107,80 +95,83 @@ import { createNewCourse } from "../../Redux/Slices/CourseSlice";
                                     onChange={handleImageUpload}
                                 />
                             </div>
-                                   
-                            <div className=" flex  flex-col gap-1">
-                                <label className=" text-lg font-semibold" htmlFor="title">
-                                            Course title
+
+                            <div className="flex flex-col gap-1">
+                                <label className="text-sm font-semibold text-gray-700" htmlFor="title">
+                                    Название курса
                                 </label>
                                 <input
                                     required
                                     type="text"
                                     name="title"
                                     id="title"
-                                    placeholder="Enter course title"
-                                    className="bg-transparent px-2 py-1 border"
+                                    placeholder="Введите название курса"
+                                    className="border border-gray-300 focus:border-primary-500 focus:outline-none px-3 py-2 rounded-lg bg-white text-gray-900 transition-colors"
                                     value={userInput.title}
                                     onChange={handleUserInput}
                                 />
-                            </div>   
-                        </div >
+                            </div>
+                        </div>
 
-                        <div className="flex flex-col gap-1">
-                            <div className=" flex  flex-col gap-1">
-                                <label className=" text-lg font-semibold" htmlFor="createdBy">
-                                        Course Instructor
+                        <div className="flex flex-col gap-4">
+                            <div className="flex flex-col gap-1">
+                                <label className="text-sm font-semibold text-gray-700" htmlFor="createdBy">
+                                    Преподаватель
                                 </label>
                                 <input
                                     required
                                     type="text"
                                     name="createdBy"
                                     id="createdBy"
-                                    placeholder="Enter course instructor"
-                                    className="bg-transparent px-2 py-1 border"
+                                    placeholder="Введите имя преподавателя"
+                                    className="border border-gray-300 focus:border-primary-500 focus:outline-none px-3 py-2 rounded-lg bg-white text-gray-900 transition-colors"
                                     value={userInput.createdBy}
                                     onChange={handleUserInput}
                                 />
-                            </div>  
-                            <div className=" flex  flex-col gap-1">
-                                <label className=" text-lg font-semibold" htmlFor="category">
-                                        Course category
+                            </div>
+
+                            <div className="flex flex-col gap-1">
+                                <label className="text-sm font-semibold text-gray-700" htmlFor="category">
+                                    Категория
                                 </label>
                                 <input
                                     required
                                     type="text"
                                     name="category"
                                     id="category"
-                                    placeholder="Enter course category"
-                                    className="bg-transparent px-2 py-1 border"
+                                    placeholder="Введите категорию"
+                                    className="border border-gray-300 focus:border-primary-500 focus:outline-none px-3 py-2 rounded-lg bg-white text-gray-900 transition-colors"
                                     value={userInput.category}
                                     onChange={handleUserInput}
                                 />
-                            </div>      
-                            <div className=" flex  flex-col gap-1">
-                                <label className=" text-lg font-semibold" htmlFor="description">
-                                        Course description
+                            </div>
+
+                            <div className="flex flex-col gap-1">
+                                <label className="text-sm font-semibold text-gray-700" htmlFor="description">
+                                    Описание курса
                                 </label>
                                 <textarea
                                     required
-                                    type="text"
                                     name="description"
                                     id="description"
-                                    placeholder="Enter course description"
-                                    className="bg-transparent px-2 py-1  h-24 overflow-scroll resize-none border"
+                                    placeholder="Введите описание курса"
+                                    className="border border-gray-300 focus:border-primary-500 focus:outline-none px-3 py-2 rounded-lg h-28 resize-none bg-white text-gray-900 transition-colors"
                                     value={userInput.description}
                                     onChange={handleUserInput}
                                 />
-                            </div>        
+                            </div>
                         </div>
                     </main>
 
-                    <button type="submit" className="w-full bg-yellow-600 text-lg hover:bg-yellow-500 transition-all duration-300 ease-in-out py-2 rounded-sm font-semibold">
-                        Create Course
+                    <button
+                        type="submit"
+                        className="w-full bg-primary-600 hover:bg-primary-700 text-white text-lg transition-all duration-300 ease-in-out py-2.5 rounded-lg font-semibold shadow-md"
+                    >
+                        Создать курс
                     </button>
-
                 </form>
             </div>
-        </HomeLayout>  
+        </HomeLayout>
     )
 }
 export default CreateCourse;

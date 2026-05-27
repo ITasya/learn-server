@@ -24,11 +24,9 @@ export const creatAccount =createAsyncThunk("/auth/singup", async(data)=>{
     try {
         const res =axiosInstance.post("user/register", data);
         toast.promise(res,{
-            loading:"wait creating your account",
-            success:(data)=>{
-                return data?.data?.message;
-            },
-            error:"Failed in create account"
+            loading:"Создаём аккаунт...",
+            success:(data)=>{ return data?.data?.message; },
+            error:"Не удалось создать аккаунт"
         })
         return(await res).data;
         
@@ -41,11 +39,9 @@ export const login =createAsyncThunk("/auth/login", async(data)=>{
     try {
         const res =axiosInstance.post("user/login", data);
         toast.promise(res,{
-            loading:"wait authentication in process..... ",
-            success:(data)=>{
-                return data?.data?.message;
-            },
-            error:"Failed to login"
+            loading:"Выполняем вход...",
+            success:(data)=>{ return data?.data?.message; },
+            error:"Не удалось войти"
         })
         return(await res).data;
         
@@ -58,11 +54,9 @@ export const logout=createAsyncThunk("/auth/logout", async ()=>{
     try {
         const res =axiosInstance.post("user/logout");
         toast.promise(res,{
-            loading:"wait logout in process..... ",
-            success:(data)=>{
-                return data?.data?.message;
-            },
-            error:"Failed to logout"
+            loading:"Выходим...",
+            success:(data)=>{ return data?.data?.message; },
+            error:"Не удалось выйти"
         })
         return(await res).data;
 
@@ -75,11 +69,9 @@ export const updateProfile=createAsyncThunk("/user/update/profile", async ( data
     try {
         const res =axiosInstance.put(`user/update`, data);
         toast.promise(res,{
-            loading:"wait profile update in process..... ",
-            success:(data)=>{
-                return data?.data?.message;
-            },
-            error:"Failed to profile update"
+            loading:"Обновляем профиль...",
+            success:(data)=>{ return data?.data?.message; },
+            error:"Не удалось обновить профиль"
         })
         return(await res).data;
 
@@ -101,11 +93,9 @@ export const forgetPassword =createAsyncThunk("/auth/forget-Password", async(dat
     try {
         const res =axiosInstance.post("user/reset", data);
         toast.promise(res,{
-            loading:"wait forgetPassword in process..... ",
-            success:(data)=>{
-                return data?.data?.message;
-            },
-            error:"Failed to forgetPassword"
+            loading:"Отправляем письмо...",
+            success:(data)=>{ return data?.data?.message; },
+            error:"Не удалось отправить письмо"
         })
         return(await res).data;
         
@@ -120,11 +110,9 @@ export const changePassword = createAsyncThunk(
         try {
         let res = axiosInstance.post("/user/change-password", userPassword);
         toast.promise(res,{
-            loading:"wait  in process..... ",
-            success:(data)=>{
-                return data?.data?.message;
-            },
-            error:"Failed to change Password"
+            loading:"Меняем пароль...",
+            success:(data)=>{ return data?.data?.message; },
+            error:"Не удалось изменить пароль"
         })
         return(await res).data;
         } catch (error) {
@@ -136,11 +124,9 @@ export const resetPassword = createAsyncThunk("/user/reset", async (data) => {
     try {
         let res = axiosInstance.post(`/user/reset/${data.resetToken}`, { password: data.password });
         toast.promise(res,{
-            loading:"wait  in process..... ",
-            success:(data)=>{
-                return data?.data?.message;
-            },
-            error:"Failed to reset Password"
+            loading:"Сбрасываем пароль...",
+            success:(data)=>{ return data?.data?.message; },
+            error:"Не удалось сбросить пароль"
         })
         return(await res).data;
     } catch (error) {

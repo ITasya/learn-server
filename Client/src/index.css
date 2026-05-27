@@ -1,8 +1,29 @@
 @import 'tailwindcss/base';
 @import 'tailwindcss/components';
 @import 'tailwindcss/utilities';
-body{
-    margin: auto;
-    /* max-width: 1440px; */
-    position: relative;
+
+:root {
+  --color-white:    #ffffff;
+  --color-bg:       #f5f3ff;
+  --color-purple:   #7c3aed;
+  --color-purple-h: #6d28d9;
+  --color-dark:     #1a1a2e;
 }
+
+body {
+  margin: auto;
+  position: relative;
+  background-color: var(--color-white);
+  color: var(--color-dark);
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: #f5f3ff; }
+::-webkit-scrollbar-thumb { background: #a78bfa; border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: #7c3aed; }
+
+/* DaisyUI table overrides for light theme */
+.table { color: #1a1a2e; }
+.table thead tr { background-color: #ede9fe; color: #4c1d95; }
+.table tbody tr:hover { background-color: #f5f3ff; }
