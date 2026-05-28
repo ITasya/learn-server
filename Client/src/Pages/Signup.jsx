@@ -55,7 +55,7 @@ function Signup(){
             return;
         }
         if(!isPassword(signupData.password)){
-            toast.error("Пароль должен содержать 6–16 символов, включая цифру и спецсимвол");
+            toast.error("Пароль должен содержать 6–16 символов, минимум одну цифру и один спецсимвол (. ! @ # $ % и др.)");
             return;
         }
 
