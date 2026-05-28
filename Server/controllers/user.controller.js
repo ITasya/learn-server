@@ -44,27 +44,23 @@ export const register=asyncHandler(async(req,res,next)=>{
         );
     }
 
-        if(req.file){
-    
+    if (req.file) {
         try {
-            const result =await cloudinary.uploader.upload(req.file.path,{
-                folder:'lms',
-                width:250,
-                height:250,
-                gravity:'faces',
-                crop:'fill'
-                
+            const result = await cloudinary.uploader.upload(req.file.path, {
+                folder: 'lms',
+                width: 250,
+                height: 250,
+                gravity: 'faces',
+                crop: 'fill',
             });
-            if(result){
-                user.avatar.public_id=result.public_id;
-                user.avatar.secure_url=result.secure_url;
-                fs.rm(`uploads/${req.file.filename}`)
+            if (result) {
+                user.avatar.public_id = result.public_id;
+                user.avatar.secure_url = result.secure_url;
             }
-            
-        } catch (e) {
-            return next(
-                new AppError( e ||'File not uploaded , please try again ', 500)
-            )
+            fs.rm(req.file.path).catch(() => {});
+        } catch (_e) {
+            // Cloudinary upload failed — keep default avatar, don't block registration
+            fs.rm(req.file.path).catch(() => {});
         }
     }
 
