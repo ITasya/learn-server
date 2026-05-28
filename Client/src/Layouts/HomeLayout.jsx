@@ -55,9 +55,9 @@ function HomeLayout({ children }) {
 
     const navLinks = [
         { to: '/', label: 'Главная' },
-        { to: '/courses', label: 'Все курсы' },
+        { to: '/courses', label: 'Каталог курсов' },
         { to: '/contact', label: 'Связаться с нами' },
-        { to: '/about', label: 'О нас' },
+        { to: '/about', label: 'О платформе' },
         ...(isLoggedIn && role === 'ADMIN'
             ? [
                 { to: '/admin/deshboard', label: 'Панель администратора' },

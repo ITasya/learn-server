@@ -1,40 +1,31 @@
- 
- import apj from '../Assets/Images/apj.png';
- import billGates from '../Assets/Images/billGates.png'
- import einstein from '../Assets/Images/einstein.png';
- import nelsonMandela from '../Assets/Images/nelsonMandela.png';
- import steveJobs from '../Assets/Images/steveJobs.png';
+import billGates from '../Assets/Images/billGates.png';
+import einstein from '../Assets/Images/einstein.png';
+import nelsonMandela from '../Assets/Images/nelsonMandela.png';
+import steveJobs from '../Assets/Images/steveJobs.png';
 
- export const celebrities=[
+export const celebrities = [
     {
-        title : "Nelson Mandela", 
-        description : "Education is the most powerful weapon which you can use to change the world.",
+        title: "Нельсон Мандела",
+        description: "Образование — самое мощное оружие, которое вы можете использовать, чтобы изменить мир.",
         image: nelsonMandela,
-        slideNumber:1,
+        slideNumber: 1,
     },
     {
-        title : "A. P. J. Abdul Kalam", 
-        description : "You have to dream before your dreams can come true.",
-        image: apj,
-        slideNumber:2,
-    },
-    {
-        title : "Albert Einstein", 
-        description : "Education is the most powerful tool you can use to change the world .",
+        title: "Альберт Эйнштейн",
+        description: "Обучение — это не заполнение ведра, а зажигание огня.",
         image: einstein,
-        slideNumber:3,
+        slideNumber: 2,
     },
     {
-        title : "Steve Jobs", 
-        description : "Were here to put a dent in the universe. Otherwise why else even be here?",
+        title: "Стив Джобс",
+        description: "Нанимайте людей умнее себя и давайте им возможность расти — в этом и есть лидерство.",
         image: steveJobs,
-        slideNumber:4,
+        slideNumber: 3,
     },
     {
-        title : "Bill Gates", 
-        description : "Success is a lousy teacher. It seduces smart people into thinking they can't lose.",
+        title: "Билл Гейтс",
+        description: "Вкладывайте в обучение сотрудников. Если они уйдут — вы потеряете немного. Если не вкладывать — потеряете всё.",
         image: billGates,
-        slideNumber:5,
+        slideNumber: 4,
     },
-    
 ]
