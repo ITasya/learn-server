@@ -22,7 +22,7 @@ app.use(
   cors({
     origin: [
       'http://localhost:5173',
-      'https://learning-management-system-roan.vercel.app',
+      'https://learn-clientt.vercel.app',
     ],
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
     preflightContinue: false,
