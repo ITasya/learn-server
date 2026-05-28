@@ -454,7 +454,7 @@ export const addLectureToCourseById = asyncHandler(async (req, res, next) => {
  * req.files: { lecture?: [File], materialFiles?: [File] }
  */
 export const updateLecture = asyncHandler(async (req, res, next) => {
-    const { id: courseId, lectureId } = req.params;
+    const { courseId, lectureId } = req.params;
     const { title, description, materials: materialsJson, quiz: quizJson, keepVideo } = req.body;
 
     if (!title || !description) {
